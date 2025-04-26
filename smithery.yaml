@@ -1,0 +1,35 @@
+startCommand:
+  type: stdio
+  # Define the schema for user configuration.
+  configSchema:
+    type: object
+    properties:
+      OPENAI_API_KEY:
+        type: string
+        description: Your OpenAI API Key for accessing embedding models.
+        # Consider adding format: password if Smithery supports masking secrets
+    required:
+      - OPENAI_API_KEY
+    additionalProperties: false # Disallow extra properties
+  # This function receives the user's config and returns the start command details.
+  commandFunction: |
+    (config) => {
+      // Ensure the config object and the key exist before accessing.
+      const apiKey = config?.OPENAI_API_KEY;
+      if (!apiKey) {
+        // Smithery should prevent this based on 'required', but good practice to check.
+        throw new Error('OPENAI_API_KEY is missing in the configuration.');
+      }
+      return {
+        command: 'node',
+        args: ['dist/server.js'],
+        // Pass the API key from the config to the server's environment.
+        env: {
+          OPENAI_API_KEY: apiKey
+        }
+      };
+    }
+# Build configuration remains the same.
+build:
+  dockerfile: Dockerfile
+  dockerBuildPath: .

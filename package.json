@@ -1,0 +1,105 @@
+{
+  "name": "@arabold/docs-mcp-server",
+  "version": "1.10.0",
+  "description": "MCP server for fetching and searching documentation",
+  "type": "module",
+  "bin": {
+    "docs-server": "dist/server.js",
+    "docs-cli": "dist/cli.js"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arabold/docs-mcp-server.git"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "package.json"
+  ],
+  "scripts": {
+    "prepare": "husky || true",
+    "build": "tsup",
+    "cli": "node --enable-source-maps dist/cli.js",
+    "start": "node --enable-source-maps dist/server.js",
+    "dev:cli": "npm run build && node --enable-source-maps dist/cli.js",
+    "server": "node --enable-source-maps --watch dist/server.js",
+    "dev:server": "run-p \"build -- --watch\" \"server\"",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "biome check .",
+    "format": "biome format . --write",
+    "postinstall": "npx playwright install --no-shell --with-deps chromium"
+  },
+  "dependencies": {
+    "@joplin/turndown-plugin-gfm": "^1.0.61",
+    "@langchain/aws": "^0.1.8",
+    "@langchain/community": "^0.3.34",
+    "@langchain/core": "^0.3.49",
+    "@langchain/google-genai": "^0.2.3",
+    "@langchain/google-vertexai": "^0.2.4",
+    "@langchain/openai": "^0.5.0",
+    "@modelcontextprotocol/sdk": "^1.6.1",
+    "axios": "^1.8.3",
+    "axios-retry": "^4.5.0",
+    "better-sqlite3": "^11.9.1",
+    "cheerio": "^1.0.0",
+    "commander": "^13.1.0",
+    "dotenv": "^16.4.7",
+    "env-paths": "^3.0.0",
+    "fuse.js": "^7.1.0",
+    "jsdom": "^26.0.0",
+    "langchain": "0.3.19",
+    "pg": "^8.14.0",
+    "playwright": "^1.52.0",
+    "psl": "^1.15.0",
+    "remark": "^15.0.1",
+    "remark-gfm": "^4.0.1",
+    "remark-html": "^16.0.1",
+    "remark-parse": "^11.0.0",
+    "semver": "^7.7.1",
+    "sqlite-vec": "^0.1.7-alpha.2",
+    "turndown": "^7.2.0",
+    "unified": "^11.0.5",
+    "uuid": "^11.1.0",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4",
+    "@commitlint/cli": "^19.8.0",
+    "@commitlint/config-conventional": "^19.8.0",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^11.0.1",
+    "@semantic-release/npm": "^12.0.1",
+    "@types/better-sqlite3": "^7.6.12",
+    "@types/jsdom": "~21.1.7",
+    "@types/lint-staged": "~13.3.0",
+    "@types/node": "^20.17.23",
+    "@types/node-fetch": "^2.6.12",
+    "@types/pg": "~8.11.11",
+    "@types/psl": "^1.1.3",
+    "@types/semver": "^7.5.8",
+    "@types/turndown": "^5.0.5",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.0",
+    "memfs": "^4.17.0",
+    "npm-run-all": "^4.1.5",
+    "semantic-release": "^24.2.3",
+    "tsup": "^8.4.0",
+    "typescript": "^5.8.2",
+    "vite": "^6.2.1",
+    "vitest": "^3.0.8"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "lint-staged": {
+    "*.{js,ts,jsx,tsx,json,md}": [
+      "biome check --apply --no-errors-on-unmatched",
+      "biome format --write --no-errors-on-unmatched"
+    ]
+  }
+}
