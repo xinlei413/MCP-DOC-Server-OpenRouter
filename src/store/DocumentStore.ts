@@ -205,8 +205,8 @@ export class DocumentStore {
       // 3. Initialize prepared statements
       this.prepareStatements();
 
-      // 4. Initialize embeddings client (await to catch errors)
-      await this.initializeEmbeddings();
+      // 4. 跳过 embedding 初始化，兼容无 embedding 纯检索/大模型场景
+      // await this.initializeEmbeddings();
     } catch (error) {
       // Re-throw StoreError directly, wrap others in ConnectionError
       if (error instanceof StoreError) {
