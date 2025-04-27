@@ -447,6 +447,42 @@ docs-cli remove react --version 18.2.0
 - **Searching/Finding:** Accepts specific versions, partials, or ranges (`X.Y.Z`, `X.Y`, `X`, `X.x`). Falls back to the latest older version if the target doesn't match. Omitting the version targets the latest available. Explicitly searching `--version ""` targets unversioned documents.
 - **Unversioned Docs:** Libraries can have documentation stored without a specific version (by omitting `--version` during scrape). These can be searched explicitly using `--version ""`. The `find-version` command will also report if unversioned docs exist alongside any semver matches.
 
+## 本地配置 OpenRouter 详细步骤（零基础操作指引）
+
+### 1. 打开 .env 文件
+- 路径：`~/MCP/MCP DOC Server/docs-mcp-server-main/.env`
+- 用文本编辑器（如 TextEdit、记事本、VSCode）打开。
+
+### 2. 填写你的 OpenRouter 信息
+用下面内容替换（或补充）你的 `.env` 文件：
+
+```
+OPENAI_API_KEY=你的OpenRouter Key
+OPENAI_API_BASE=https://openrouter.ai/api/v1
+MODEL_ID=qwen/qwen2.5-vl-3b-instruct:free
+```
+
+> 说明：
+> - `OPENAI_API_KEY` 用你的 OpenRouter Key（如上示例）。
+> - `OPENAI_API_BASE` 固定为 `https://openrouter.ai/api/v1`。
+> - `MODEL_ID` 填 `qwen/qwen2.5-vl-3b-instruct:free`。
+
+### 3. 保存 .env 文件
+
+### 4. 重启 MCP Server
+- 关闭之前的 MCP Server 终端窗口（如有）。
+- 在 MCP 目录下重新运行：
+
+```bash
+npm run dev:server
+```
+
+- 等待出现 `Build success`、`Watching for changes` 字样。
+
+---
+
+如遇到任何问题，把报错内容发给开发者或技术支持即可。
+
 ## Development & Advanced Setup
 
 This section covers running the server/CLI directly from the source code for development purposes. The primary usage method is now via the public Docker image as described in "Method 2".
