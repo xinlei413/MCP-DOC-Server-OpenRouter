@@ -185,43 +185,10 @@ export class DocumentStore {
   }
 
   /**
-   * Initializes embeddings client using environment variables for configuration.
-   *
-   * The embedding model is configured using DOCS_MCP_EMBEDDING_MODEL environment variable.
-   * Format: "provider:model_name" (e.g., "google:text-embedding-004") or just "model_name"
-   * for OpenAI (default).
-   *
-   * Supported providers and their required environment variables:
-   * - openai: OPENAI_API_KEY (and optionally OPENAI_API_BASE, OPENAI_ORG_ID)
-   * - google: GOOGLE_APPLICATION_CREDENTIALS (path to service account JSON)
-   * - aws: AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION (or BEDROCK_AWS_REGION)
-   * - microsoft: Azure OpenAI credentials (AZURE_OPENAI_API_*)
+   * Embedding 已禁用，无需初始化 embedding
    */
-  private async initializeEmbeddings(): Promise<void> {
-    const modelSpec = process.env.DOCS_MCP_EMBEDDING_MODEL || "text-embedding-3-small";
-
-    // Import dynamically to avoid circular dependencies
-    const { createEmbeddingModel } = await import("./embeddings/EmbeddingFactory");
-    this.embeddings = createEmbeddingModel(modelSpec);
-
-    // Determine the model's actual dimension by embedding a test string
-    const testVector = await this.embeddings.embedQuery("test");
-    this.modelDimension = testVector.length;
-
-    if (this.modelDimension > this.dbDimension) {
-      throw new DimensionError(modelSpec, this.modelDimension, this.dbDimension);
-    }
-  }
-
-  /**
-   * Escapes a query string for use with SQLite FTS5 MATCH operator.
-   * Wraps the query in double quotes and escapes internal double quotes.
-   */
-  private escapeFtsQuery(query: string): string {
-    // Escape internal double quotes by doubling them
-    const escapedQuotes = query.replace(/"/g, '""');
-    // Wrap the entire string in double quotes
-    return `"${escapedQuotes}"`;
+  async initializeEmbeddings(): Promise<void> {
+    throw new Error("Embedding functionality has been disabled in this build.");
   }
 
   /**

@@ -27,6 +27,71 @@ The server exposes MCP tools for:
 - Removing indexed documents (`remove_docs`).
 - Fetching single URLs (`fetch_url`): Fetches a URL and returns its content as Markdown.
 
+## 🆕 OpenRouter API 集成与多模型支持
+
+### Chat/Completions 功能
+
+本服务已全面适配 OpenRouter API，支持主流大模型（GPT-4.1、Claude 3.7、Gemini 2.5、Grok、Qwen 等），并支持多模态输入（文本+图片）。
+
+#### 主要特性
+- ✅ 支持 OpenRouter 官方所有主流模型，模型列表见 `src/utils/openrouter.ts` 的 `OPENROUTER_MODELS`
+- ✅ 支持多模态消息格式（如 text、image_url）
+- ✅ 支持自定义 HTTP-Referer、X-Title 等 header，便于 openrouter.ai 统计和排名
+- ✅ 支持 OpenRouter API 的所有扩展参数（如 stream、tools、temperature、max_tokens 等）
+
+#### 环境变量配置
+- `OPENAI_API_KEY`：OpenRouter API Key（必填）
+- `OPENAI_API_BASE`：OpenRouter API Base，推荐 `https://openrouter.ai/api/v1`
+- `MODEL_ID`：默认模型（如 `openai/gpt-4.1`），可选
+
+#### 示例代码
+
+```typescript
+import { openrouterChat } from './src/utils/openrouter';
+
+const messages = [
+  {
+    role: 'user',
+    content: [
+      { type: 'text', text: 'What is in this image?' },
+      { type: 'image_url', image_url: { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Gfp-wisconsin-madison-the-nature-boardwalk.jpg/2560px-Gfp-wisconsin-madison-the-nature-boardwalk.jpg' } }
+    ]
+  }
+];
+
+const result = await openrouterChat({
+  model: 'openai/gpt-4.1',
+  messages,
+  referer: 'https://your-site.com', // 可选
+  xTitle: 'Your Site Name'           // 可选
+  // 还可加 extraBody, headers 等参数
+});
+console.log(result);
+```
+
+#### 支持的主流模型（部分示例）
+- openai/gpt-4.1
+- openai/gpt-4.1-mini
+- anthropic/claude-3.7-sonnet
+- google/gemini-2.5-pro-preview-03-25
+- x-ai/grok-3-beta
+- qwen/qwen2.5-vl-32b-instruct:free
+- deepseek/deepseek-chat-v3-0324:free
+- thudm/glm-z1-32b:free
+- openrouter/auto
+- ...（详见源码 OPENROUTER_MODELS）
+
+#### 更多 API 参数
+如需支持流式输出、函数调用、system prompt、stop、temperature、max_tokens 等 OpenRouter API 参数，只需通过 `extraBody` 字段传递即可，无需修改底层代码。
+
+## ⚠️ Embedding 功能说明
+
+> **Embedding 功能已禁用！**
+>
+> 本项目当前版本已彻底移除所有 embedding 相关实现和依赖，不再支持向量生成与检索。所有 embedding 相关 API 均会直接抛出异常提示。
+> 
+> 仅保留全文检索与大模型 chat/completions 能力。
+
 ## Configuration
 
 The following environment variables are supported to configure the embedding model behavior:
